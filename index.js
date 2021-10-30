@@ -22,6 +22,11 @@ const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
+app.get('/',(req,res)=>{
+    
+    res.send("Hello")
+})
+
 async function run(){
     try{
         await client.connect();
@@ -44,7 +49,6 @@ async function run(){
             const result = collection.find({});
             const users = await result.toArray();
             res.send(users)
-
         })
 
         //Delete API
