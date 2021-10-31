@@ -36,12 +36,29 @@ async function run(){
 
 
 
+
+
+
+        app.get('/itemFind/:id',async(req,res)=>{
+           
+            const id = req.params.id;
+            const query = {_id:ObjectId(id)}
+            const result = await ItemsCollection.findOne(query);
+            res.send(result)
+            
+        })
+            // GET API
+
+            app.get('/getItems',async(req,res)=>{
+                const result = ItemsCollection.find({});
+                const users = await result.toArray();
+                res.send(users)
+            })
         
         //API POST
         app.post('/addItem',async(req,res)=>{
             const data =req.body;
             const result = await ItemsCollection.insertOne(data)
-            console.log(result)
            res.json(result)
         })
 
@@ -50,7 +67,6 @@ async function run(){
         app.post('/addUser',async(req,res)=>{
             const data =req.body;
             const result = await collection.insertOne(data)
-            console.log(result)
            res.json(result)
         })
 
@@ -60,7 +76,6 @@ async function run(){
         app.get('/users',async(req,res)=>{
             const result = collection.find({});
             const users = await result.toArray();
-            console.log(users);
             res.send(users)
         })
 
@@ -75,9 +90,7 @@ async function run(){
         // Find API
         app.get('/findUser/:email',async(req,res)=>{
             const email = req.params.email;
-            console.log(email);
                 const query = {'user':{'email':email}}
-                console.log(query);
             const result =  collection.find({'user.email':email});
             const usersData = await result.toArray();
             console.log(usersData);
@@ -100,7 +113,6 @@ async function run(){
         app.patch('/action',(req,res)=>{
             const id=req.body.id;
             const value=req.body.actionValue;
-            console.log(id,value);
             if(id && value){
                 collection.updateOne({_id:ObjectId(id)},{
                 $set:{'user.status':value}
