@@ -38,6 +38,7 @@ async function run(){
         app.post('/addUser',async(req,res)=>{
             const data =req.body;
             const result = await collection.insertOne(data)
+            console.log(result)
            res.json(result)
         })
 
@@ -47,6 +48,7 @@ async function run(){
         app.get('/users',async(req,res)=>{
             const result = collection.find({});
             const users = await result.toArray();
+            console.log(users);
             res.send(users)
         })
 
@@ -59,15 +61,27 @@ async function run(){
         })
 
         // Find API
-        app.get('/findUser/:id',async(req,res)=>{
+        app.get('/findUser/:email',async(req,res)=>{
+            const email = req.params.email;
+            console.log(email);
+                const query = {'user':{'email':email}}
+                console.log(query);
+            const result =  collection.find({'user.email':email});
+            const usersData = await result.toArray();
+            console.log(usersData);
+            res.send(usersData)
+        })
+
+
+        //FindUser By ID
+         // Find API
+         app.get('/find/:id',async(req,res)=>{
             const id = req.params.id;
             const query = {_id:ObjectId(id)}
             const result = await collection.findOne(query);
             res.send(result)
             
         })
-
-
 
       //update API 
 
