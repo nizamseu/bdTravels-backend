@@ -32,6 +32,18 @@ async function run(){
 
         const database =client.db('bdTravels');
         const collection = database.collection('users');
+        const ItemsCollection = database.collection('items');
+
+
+
+        
+        //API POST
+        app.post('/addItem',async(req,res)=>{
+            const data =req.body;
+            const result = await ItemsCollection.insertOne(data)
+            console.log(result)
+           res.json(result)
+        })
 
 
         //API POST
@@ -82,6 +94,24 @@ async function run(){
             res.send(result)
             
         })
+
+
+
+        app.patch('/action',(req,res)=>{
+            const id=req.body.id;
+            const value=req.body.actionValue;
+            console.log(id,value);
+            if(id && value){
+                collection.updateOne({_id:ObjectId(id)},{
+                $set:{'user.status':value}
+            })
+            .then(result=>{
+                res.send(result.modifiedCount>0)
+            })
+            }
+            })
+
+
 
       //update API 
 
